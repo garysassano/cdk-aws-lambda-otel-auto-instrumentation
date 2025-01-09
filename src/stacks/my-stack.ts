@@ -20,7 +20,7 @@ export class MyStack extends Stack {
     const adotLayer = LayerVersion.fromLayerVersionArn(
       this,
       "AdotLayer",
-      "arn:aws:lambda:<region>:901920570463:layer:aws-otel-nodejs-<architecture>-ver-1-30-1:1",
+      "arn:aws:lambda:eu-central-1:901920570463:layer:aws-otel-nodejs-arm64-ver-1-30-1:1",
     );
 
     // Lambda function sending trace data to Honeycomb
