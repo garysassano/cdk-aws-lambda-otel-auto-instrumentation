@@ -20,13 +20,13 @@ export class MyStack extends Stack {
     const adotLayer = LayerVersion.fromLayerVersionArn(
       this,
       "AdotLayer",
-      "arn:aws:lambda:eu-central-1:901920570463:layer:aws-otel-nodejs-arm64-ver-1-18-1:4",
+      "arn:aws:lambda:<region>:901920570463:layer:aws-otel-nodejs-<architecture>-ver-1-30-1:1",
     );
 
     // Lambda function sending trace data to Honeycomb
     new NodejsFunction(this, "AdotAutoLambda", {
       functionName: "adot-auto-lambda",
-      entry: join(__dirname, "..", "functions", "adot-auto", "index.ts"),
+      entry: join(__dirname, "..", "functions/adot-auto", "index.ts"),
       layers: [adotLayer],
       runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
@@ -35,7 +35,8 @@ export class MyStack extends Stack {
       loggingFormat: LoggingFormat.JSON,
       environment: {
         AWS_LAMBDA_EXEC_WRAPPER: "/opt/otel-handler",
-        OPENTELEMETRY_COLLECTOR_CONFIG_FILE: "/var/task/collector-confmap.yml",
+        OPENTELEMETRY_COLLECTOR_CONFIG_URI:
+          "file:/var/task/collector-confmap.yml",
         OTEL_LAMBDA_DISABLE_AWS_CONTEXT_PROPAGATION: "true",
         OTEL_SERVICE_NAME: "adot-auto-lambda",
         OTEL_PROPAGATORS: "tracecontext",
